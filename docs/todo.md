@@ -1,7 +1,7 @@
 # ✅ TODO - Notepad App
 
 ## 🚀 機能面
-- [ ] CRUD の完成（Edit / Delete を追加）
+- [✓] CRUD の完成（Edit / Delete を追加）
 - [ ] 排他制御を共通 `isProcessing` で実装
 - [ ] トースト通知で操作結果（成功/失敗）を表示
 - [ ] メモの並び順を作成日時の降順にする
@@ -16,9 +16,9 @@
 ---
 
 ## 📝 ドキュメント
-- [x] `/docs/spec.md` を作成
-- [x] `/docs/why-it-works.md` を作成
-- [ ] `/docs/todo.md` を作成 ← 今これ！
+- [✓] `/docs/spec.md` を作成
+- [✓] `/docs/why-it-works.md` を作成
+- [✓] `/docs/todo.md` を作成 ← 今これ！
 - [ ] GitHub Wiki や Notion に転記する構想を立てる
 
 ---
