@@ -44,8 +44,7 @@ notepad-app/
 ├─ src/app/          # App Router ページ
 │  ├─ page.tsx       # ログイン＋メモ UI
 │  └─ globals.css
-├─ lib/
-│  └─ supabase.ts    # Supabase クライアントラッパー
+
 ├─ public/
 ├─ tailwind.config.ts
 ├─ postcss.config.js
@@ -88,6 +87,7 @@ create policy "自分のメモのみ書込" on memos
 ```
 
 上記 SQL を Supabase **SQL Editor** で実行して下さい。
+* Supabaseクライアントの初期化とデータベース操作は、src/app/page.tsx 内で直接行われています。
 
 ---
 
