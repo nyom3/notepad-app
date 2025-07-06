@@ -1,1 +1,1 @@
-feat: Improve memo edit and update functionality
+feat: Implement delete functionality and complete CRUD
