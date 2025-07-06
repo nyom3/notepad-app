@@ -14,6 +14,7 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [memos, setMemos] = useState<any[]>([]);
   const [newMemo, setNewMemo] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getSession = async () => {
@@ -56,12 +57,22 @@ export default function Home() {
     setMemos(data || []);
   };
 
-  const handleAddMemo = async () => {
-    if (newMemo.trim() === '') return;
-    await supabase.from('memos').insert([{ content: newMemo }]);
+const handleAddMemo = async () => {
+  if (!newMemo.trim() || !session) return;
+  setIsLoading(true);
+  try {
+    const { error } = await supabase
+      .from('memos')
+      .insert([{ content: newMemo, user_id: session.user.id }]);
+    if (error) throw error;
     setNewMemo('');
-    fetchMemos();
-  };
+    await fetchMemos();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   if (!session) {
     return (
