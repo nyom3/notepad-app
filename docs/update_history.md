@@ -1,5 +1,128 @@
 # 更新履歴
 
+## 2025-07-06: メモの削除機能の実装とCRUD完了
+
+### 概要
+
+メモの削除機能（Delete）を実装し、基本的なCRUD（Create, Read, Update, Delete）操作がすべて可能になりました。ユーザーが誤ってメモを削除しないよう、削除前に確認モーダルを表示する機能も追加しています。
+
+### 変更点
+
+1.  **メモ削除機能:**
+    -   各メモに「Delete」ボタンを設置しました。
+    -   ボタンクリックで、Supabaseの`memos`テーブルから対象のレコードを削除します。
+
+2.  **削除確認モーダル:**
+    -   「Delete」ボタンを押すと、本当に削除してよいかを確認するモーダルウィンドウが表示されます。
+    -   「OK」を押すと削除が実行され、「キャンセル」を押すと操作が中断されます。
+
+3.  **READMEの更新:**
+    -   CRUD機能の実装が完了したことを反映し、READMEの該当項目を更新しました。
+
+### ソースコードの差分
+
+```diff
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index 86afe8c..f5fe1d6 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -28,6 +28,9 @@ export default function Home() {
+   // 編集対象のメモIDを保持する状態
+   // Editボタンが押されるとこのIDがセットされ、Updateモードになる
+   const [editTargetId, setEditTargetId] = useState<string | null>(null);
++  // 削除確認モーダルの表示状態と対象IDを管理
++  const [showDeleteModal, setShowDeleteModal] = useState(false);
++  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+ 
+   /**
+    * コンポーネントのマウント時に一度だけ実行されます。
+@@ -157,6 +160,42 @@ export default function Home() {
+     setEditTargetId(null);
+   };
+ 
++  // handleDeleteMemoをモーダル用に分割
++  // 削除ボタン押下時にモーダルを表示
++  const handleDeleteClick = (memoId: string) => {
++    setDeleteTargetId(memoId);
++    setShowDeleteModal(true);
++  };
++
++  // モーダルでOK時の削除処理
++  const handleConfirmDelete = async () => {
++    if (!session || !deleteTargetId) {
++      setShowDeleteModal(false);
++      return;
++    }
++    setIsLoading(true);
++    setShowDeleteModal(false);
++    try {
++      const { error } = await supabase
++        .from('memos')
++        .delete()
++        .eq('id', deleteTargetId);
++      if (error) throw error;
++      await fetchMemos();
++    } catch (err) {
++      console.error(err);
++    } finally {
++      setIsLoading(false);
++      setDeleteTargetId(null);
++    }
++  };
++
++  // モーダルでキャンセル時
++  const handleCancelDelete = () => {
++    setShowDeleteModal(false);
++    setDeleteTargetId(null);
++  };
++
+   // セッションがない場合（未ログイン状態）は、ログイン/サインアップフォームを表示します。
+   if (!session) {
+     return (
+@@ -234,10 +273,41 @@ export default function Home() {
+             >
+               Edit
+             </button>
++            {/* 削除ボタンを追加 */}
++            <button
++              onClick={() => handleDeleteClick(memo.id)}
++              className="bg-red-500 text-white p-1 rounded"
++            >
++              Delete
++            </button>
+             {memo.content}
+           </li>
+         ))}
+       </ul>
++      {/* 削除確認モーダル */}
++      {showDeleteModal && (
++        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
++          <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
++            <p className="mb-4">本当にこのメモを削除しますか？</p>
++            <div className="flex gap-4">
++              <button
++                onClick={handleConfirmDelete}
++                className="bg-red-500 text-white px-4 py-2 rounded"
++                disabled={isLoading}
++              >
++                OK
++              </button>
++              <button
++                onClick={handleCancelDelete}
++                className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
++                disabled={isLoading}
++              >
++                キャンセル
++              </button>
++            </div>
++          </div>
++        </div>
++      )}
+     </div>
+   );
+ }
+```
+
 ## 2025-07-06: メモの編集・更新機能の改善
 
 ### 概要

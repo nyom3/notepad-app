@@ -1,1 +1,1 @@
-Update README.md to reflect current project structure
+feat: Improve memo edit and update functionality

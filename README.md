@@ -9,7 +9,7 @@
 | 区分         | 詳細                                                           |
 | ---------- | ------------------------------------------------------------ |
 | **認証**     | Supabase のメールリンク認証（Magic Link）                               |
-| **CRUD**   | メモの追加・一覧・編集・削除                                               |
+| **CRUD**   | CRUD 実装完了                                               |
 | **スタイル**   | Tailwind CSS 3（Autoprefixer 連携）                              |
 | **状態管理**   | React 19 フックのみ。外部ライブラリなし                                     |
 | **データベース** | Postgres テーブル `memos`（id / user\_id / content / created\_at） |
