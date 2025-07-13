@@ -1,1 +1,1 @@
-feat: Implement delete functionality and complete CRUD
+chore: Remove .env.local from git tracking
